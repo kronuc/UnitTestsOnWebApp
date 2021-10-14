@@ -1,0 +1,20 @@
+﻿@using DataProject.Entities
+@model List<User>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form method="post">
+    <label>start:</label><br />
+    <input type="number" name="start" /><br />
+    <label>end:</label><br />
+    <input type="number" name="end" /><br />
+    <input type="submit" value="send" />
+</form>
+
+
+            @foreach(User user in Model)
+            {
+                <p>id: @user.Id, name: @user.Name</p>
+            }

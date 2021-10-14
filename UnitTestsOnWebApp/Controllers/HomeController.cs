@@ -29,11 +29,7 @@ namespace UnitTestsOnWebApp.Controllers
         public IActionResult Index(int start, int end)
         {
             
-            return View
-                (
-                    _userRepository
-                    .GetUserRange(start, end)
-                );
+            return View(_userRepository.GetUserRange(start, end) );
         }
     }
 }

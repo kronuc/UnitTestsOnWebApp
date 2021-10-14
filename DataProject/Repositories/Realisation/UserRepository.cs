@@ -19,9 +19,9 @@ namespace DataProject.Repositories.Realisation
             }
         }
 
-        public IEnumerable<User> GetUserByName(string name)
+        public List<User> GetUserRange(int start, int end)
         {
-            return _items.Where(item => item.Name.Contains(name)).ToList();
+            return _items.Where(item => item.Id < end & item.Id >= start).ToList();
         }
     }
 }

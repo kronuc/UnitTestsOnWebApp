@@ -11,12 +11,11 @@ namespace UnitTestsOnWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        
         private IUserRepository _userRepository;
 
-        public HomeController(ILogger<HomeController> logger, IUserRepository repository)
+        public HomeController(IUserRepository repository)
         {
-            _logger = logger;
             _userRepository = repository;
         }
 
@@ -30,7 +29,11 @@ namespace UnitTestsOnWebApp.Controllers
         public IActionResult Index(int start, int end)
         {
             
-            return View(_userRepository.GetAll().Where(item => item.Id >= start && item.Id <= end).ToList());
+            return View
+                (
+                    _userRepository
+                    .GetUserRange(start, end)
+                );
         }
     }
 }

@@ -9,6 +9,6 @@ namespace DataProject.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<User ,int>
     {
-        public IEnumerable<User> GetUserByName(string name);
+        public List<User> GetUserRange(int start, int end);
     }
 }

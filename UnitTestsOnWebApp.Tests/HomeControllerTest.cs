@@ -32,9 +32,9 @@ namespace UnitTestsOnWebApp.Tests
             userRepository.GetAll().Returns(new List<User>());
             HomeController homeController = new HomeController(userRepository);
 
-            var actual = homeController.Index() as ViewResult;
+            var actual = homeController.Index();
 
-            actual.Model.Should().BeOfType<List<User>>();
+            actual.As<ViewResult>().Model.Should().BeOfType<List<User>>();
         }
 
         [Fact]
@@ -57,9 +57,9 @@ namespace UnitTestsOnWebApp.Tests
             HomeController homeController = new HomeController(userRepository);
 
 
-            var actual = homeController.Index(AutoFaker.Generate<int>(), AutoFaker.Generate<int>()) as ViewResult;
+            var actual = homeController.Index(AutoFaker.Generate<int>(), AutoFaker.Generate<int>());
 
-            actual.Model.Should().BeOfType<List<User>>();
+            actual.As<ViewResult>().Model.Should().BeOfType<List<User>>();
         }
 
         [Theory]
@@ -73,9 +73,9 @@ namespace UnitTestsOnWebApp.Tests
             HomeController homeController = new HomeController(userRepository);
             int expected = inputDatataLenght;
             
-            var actual = homeController.Index() as ViewResult;
+            var actual = homeController.Index();
 
-            (actual.Model as List<User>).Count.Should().Be(expected);
+            actual.As<ViewResult>().Model.As<List<User>>().Count.Should().Be(expected);
         }
 
         [Theory]
@@ -89,9 +89,9 @@ namespace UnitTestsOnWebApp.Tests
             HomeController homeController = new HomeController(userRepository);
             var expected = dataSource;
 
-            var actual = homeController.Index() as ViewResult;
+            var actual = homeController.Index();
 
-            (actual.Model as List<User>).Should().BeEquivalentTo(expected);
+            actual.As<ViewResult>().Model.As<List<User>>().Should().BeEquivalentTo(expected);
         }
 
         [Theory]
@@ -105,9 +105,9 @@ namespace UnitTestsOnWebApp.Tests
             HomeController homeController = new HomeController(userRepository);
             var expected = dataSource;
 
-            var actual = homeController.Index(start, end) as ViewResult;
+            var actual = homeController.Index(start, end);
 
-            (actual.Model as List<User>).Should().BeEquivalentTo(expected);
+            actual.As<ViewResult>().Model.As<List<User>>().Should().BeEquivalentTo(expected);
         }
         [Theory]
         [InlineData(0, 1, 2)]
@@ -121,16 +121,18 @@ namespace UnitTestsOnWebApp.Tests
             var expected = dataSource;
 
 
-            var actual = homeController.Index(start, end) as ViewResult;
+            var actual = homeController.Index(start, end);
 
-            (actual.Model as List<User>).Should().BeEquivalentTo(expected);
+            actual.As<ViewResult>().Model.As<List<User>>().Should().BeEquivalentTo(expected);
         }
 
 
         private List<User> DataGeneration(int userAmount)
         {
             List<User> users = new List<User>();
-            var userFaker = new AutoFaker<User>().RuleFor(fake => fake.Id, fake => fake.Random.Int());
+            var userFaker = new AutoFaker<User>()
+                .RuleFor(fake => fake.Id, fake => fake.IndexFaker)
+                .RuleFor(fake => fake.Name, fake => fake.Name.FirstName());
             for(int i =0; i < userAmount; i++)
             {
                 users.Add(userFaker.Generate());
